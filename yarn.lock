@@ -2425,6 +2425,7 @@ __metadata:
     stylelint: "npm:^16.0.2"
     stylelint-config-standard-scss: "npm:^13.0.0"
     substring-trie: "npm:^1.0.2"
+    suncalc: "npm:^1.8.0"
     terser-webpack-plugin: "npm:^4.2.3"
     tesseract.js: "npm:^2.1.5"
     tiny-queue: "npm:^0.2.1"
@@ -15699,6 +15700,13 @@ __metadata:
   version: 1.0.2
   resolution: "substring-trie@npm:1.0.2"
   checksum: 10c0/ee1a65a6282f57fc4a97ded6dd057ffc597516ea7a4b0ae7374c0c0313ca4d9f3cb0652ae0294ca52232f2d5dedf13c27e9e442666d8ad51bcf91877cd18c092
+  languageName: node
+  linkType: hard
+
+"suncalc@npm:^1.8.0":
+  version: 1.9.0
+  resolution: "suncalc@npm:1.9.0"
+  checksum: 10c0/3c76c600ec8e60b7a6efab72f48cce3fc9b4ce95f8fa404fcd13d22f618fee2b83d7ad486544aee76bc20129c9f4eae4a76b09640c54167edd1de6099ca6cd3d
   languageName: node
   linkType: hard
 

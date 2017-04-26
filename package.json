@@ -118,6 +118,7 @@
     "stacktrace-js": "^2.0.2",
     "stringz": "^2.1.0",
     "substring-trie": "^1.0.2",
+    "suncalc": "^1.8.0",
     "terser-webpack-plugin": "^4.2.3",
     "tesseract.js": "^2.1.5",
     "tiny-queue": "^0.2.1",
