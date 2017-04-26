@@ -120,6 +120,7 @@
     "stringz": "^0.3.0",
     "style-loader": "^0.23.0",
     "substring-trie": "^1.0.2",
+    "suncalc": "^1.8.0",
     "throng": "^4.0.0",
     "tiny-queue": "^0.2.1",
     "uglifyjs-webpack-plugin": "^1.2.7",
