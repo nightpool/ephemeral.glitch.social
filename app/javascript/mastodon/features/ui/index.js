@@ -60,6 +60,7 @@ import { closeOnboarding, INTRODUCTION_VERSION } from 'mastodon/actions/onboardi
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '../../components/status';
+import Moon from '../../components/moon';
 
 const messages = defineMessages({
   beforeUnload: { id: 'ui.beforeunload', defaultMessage: 'Your draft will be lost if you leave Mastodon.' },
@@ -548,6 +549,7 @@ class UI extends React.PureComponent {
           <ModalContainer />
           <UploadArea active={draggingOver} onClose={this.closeUploadModal} />
           <DocumentTitle />
+          <Moon />
         </div>
       </HotKeys>
     );
