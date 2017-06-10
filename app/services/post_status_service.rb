@@ -38,7 +38,7 @@ class PostStatusService < BaseService
     process_mentions_service.call(status)
 
     moon = Lunartic.today
-    removal_delay = (moon.percent_full * 55 + 5)
+    removal_delay = (moon.percent_full * 220 + 20)
     RemovalWorker.perform_in(removal_delay.minutes, status.id)
 
     LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text?
