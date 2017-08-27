@@ -155,6 +155,8 @@ Rails.application.configure do
     'X-Content-Type-Options' => 'nosniff',
     'X-XSS-Protection' => '0',
     'Referrer-Policy' => 'same-origin',
+    'Content-Security-Policy' => "frame-ancestors 'none'; object-src 'none'; script-src 'self' https://ephemeral-static.glitch.social 'unsafe-inline'; base-uri 'none';" ,
+    'Strict-Transport-Security' => 'max-age=63072000; includeSubDomains; preload'
   }
 
   config.x.otp_secret = ENV.fetch('OTP_SECRET')
