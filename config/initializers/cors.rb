@@ -23,5 +23,18 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
                methods: %i(post put delete get patch options)
       resource '/oauth/token', methods: [:post]
     end
+
+    resource '/assets/*',
+      headers: :any,
+      methods: [:get, :head, :options]
+    resource '/stylesheets/*',
+      headers: :any,
+      methods: [:get, :head, :options]
+    resource '/javascripts/*',
+      headers: :any,
+      methods: [:get, :head, :options]
+    resource '/packs/*',
+      headers: :any,
+      methods: [:get, :head, :options]
   end
 end
