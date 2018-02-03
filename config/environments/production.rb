@@ -124,7 +124,7 @@ Rails.application.configure do
     'Permissions-Policy'     => 'interest-cohort=()',
     'X-XSS-Protection'        => '1; mode=block',
     'Content-Security-Policy' => "frame-ancestors 'none'; object-src 'none'; script-src 'self' https://ephemeral-static.glitch.social ; base-uri 'none';" , 
-    'Referrer-Policy'         => 'no-referrer, strict-origin-when-cross-origin',
+    'Referrer-Policy'         => 'same-origin',
     'Strict-Transport-Security' => 'max-age=63072000; includeSubDomains; preload'
   }
 
