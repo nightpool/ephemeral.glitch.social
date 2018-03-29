@@ -118,9 +118,6 @@ class PostStatusService < BaseService
   def postprocess_status!
     process_hashtags_service.call(@status)
 
-    moon = Lunartic.today
-    removal_delay = (moon.percent_full * 220 + 20)
-    RemovalWorker.perform_in(removal_delay.minutes, status.id)
 
     Trends.tags.register(@status)
     LinkCrawlWorker.perform_async(@status.id)

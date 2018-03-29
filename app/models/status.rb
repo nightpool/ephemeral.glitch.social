@@ -314,6 +314,14 @@ class Status < ApplicationRecord
     end
   end
 
+  def schedule_removal
+    moon = Lunartic.today
+    removal_delay = (moon.percent_full * 220 + 20)
+    RemovalWorker.perform_in(removal_delay.minutes, id)
+  end
+
+  after_create_commit :schedule_removal
+
   def requires_review?
     attributes['trendable'].nil? && account.requires_review?
   end
