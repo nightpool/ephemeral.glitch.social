@@ -1,12 +1,18 @@
 [Unit]
-Description=mastodon-streaming
+Description=ephemeral.glitch.social-streaming
 After=network.target
 Wants=mastodon-streaming@4000.service
 
 [Service]
-Type=oneshot
-ExecStart=/bin/echo "mastodon-streaming exists only to collectively start and stop mastodon-streaming@ instances, shimming over the migration to templated mastodon-streaming systemd unit"
-RemainAfterExit=yes
+Type=simple
+User=mastodon
+WorkingDirectory=/home/mastodon/ephemeral.glitch.social
+Environment="NODE_ENV=production"
+Environment="PORT=4001"
+Environment="STREAMING_CLUSTER_NUM=1"
+ExecStart=/usr/bin/node ./streaming
+TimeoutSec=15
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
