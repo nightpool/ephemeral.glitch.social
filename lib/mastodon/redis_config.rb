@@ -22,7 +22,7 @@ setup_redis_env_url
 setup_redis_env_url(:cache, false)
 
 namespace       = ENV.fetch('REDIS_NAMESPACE') { nil }
-cache_namespace = namespace ? namespace + '_cache' : 'cache'
+cache_namespace = [namespace, 'cache', `git rev-parse --short HEAD`.strip].compact.join('_')
 
 REDIS_CACHE_PARAMS = {
   expires_in: 10.minutes,
