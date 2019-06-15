@@ -26,9 +26,8 @@ setup_redis_env_url
 setup_redis_env_url(:cache, false)
 setup_redis_env_url(:sidekiq, false)
 
-namespace         = ENV.fetch('REDIS_NAMESPACE', nil)
-cache_namespace   = namespace ? "#{namespace}_cache" : 'cache'
-sidekiq_namespace = namespace
+namespace       = ENV.fetch('REDIS_NAMESPACE') { nil }
+cache_namespace = [namespace, 'cache', `git rev-parse --short HEAD`].compact.join('_')
 
 REDIS_CACHE_PARAMS = {
   driver: :hiredis,
