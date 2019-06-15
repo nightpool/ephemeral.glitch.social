@@ -118,7 +118,14 @@ class FanOutOnWriteService < BaseService
     end
   end
 
+  def spammy_mentions?
+    @status.has_non_mention_links? &&
+      @account.followers.local.count == 0
+  end
+
   def deliver_to_mentioned_followers!
+    return if spammy_mentions?
+
     @status.mentions.joins(:account).merge(@account.followers_for_local_distribution).select(:id, :account_id).reorder(nil).find_in_batches do |mentions|
       FeedInsertWorker.push_bulk(mentions) do |mention|
         [@status.id, mention.account_id, 'home', { 'update' => update? }]
