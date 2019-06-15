@@ -27,7 +27,7 @@ setup_redis_env_url(:cache, false)
 setup_redis_env_url(:sidekiq, false)
 
 namespace         = ENV.fetch('REDIS_NAMESPACE', nil)
-cache_namespace   = namespace ? namespace + '_cache' : 'cache'
+cache_namespace = [namespace, 'cache', `git rev-parse --short HEAD`.strip].compact.join('_')
 sidekiq_namespace = namespace
 
 REDIS_CACHE_PARAMS = {
