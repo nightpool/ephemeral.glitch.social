@@ -23,6 +23,11 @@
 
 = render 'header', account: @account, with_bio: true
 
+- if @account.user&.disabled?
+  .header
+    .nav-center
+      %h2 This user's account has been locked by a moderator.
+
 .grid
   .column-0
     .h-feed

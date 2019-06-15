@@ -232,6 +232,13 @@
       min-height: 1px;
     }
 
+    h2 {
+      font-size: 1rem;
+      align-items: center;
+      display: flex;
+      font-style: italic;
+    }
+
     .nav-left {
       display: flex;
       align-items: stretch;
