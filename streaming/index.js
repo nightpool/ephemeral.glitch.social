@@ -12,6 +12,7 @@ const uuid = require('uuid');
 const fs = require('fs');
 
 const env = process.env.NODE_ENV || 'development';
+const alwaysRequireAuth = process.env.WHITELIST_MODE === 'true' || process.env.AUTHORIZED_FETCH === 'true';
 
 dotenv.config({
   path: env === 'production' ? '.env.production' : '.env',
@@ -265,13 +266,15 @@ const startWorker = (workerId) => {
     'public:media',
     'public:local',
     'public:local:media',
+    'public:remote',
+    'public:remote:media',
     'hashtag',
     'hashtag:local',
   ];
 
   const wsVerifyClient = (info, cb) => {
     const location = url.parse(info.req.url, true);
-    const authRequired = !PUBLIC_STREAMS.some(stream => stream === location.query.stream);
+    const authRequired = alwaysRequireAuth || !PUBLIC_STREAMS.some(stream => stream === location.query.stream);
     const allowedScopes = [];
 
     if (authRequired) {
@@ -296,6 +299,7 @@ const startWorker = (workerId) => {
   const PUBLIC_ENDPOINTS = [
     '/api/v1/streaming/public',
     '/api/v1/streaming/public/local',
+    '/api/v1/streaming/public/remote',
     '/api/v1/streaming/hashtag',
     '/api/v1/streaming/hashtag/local',
   ];
@@ -306,7 +310,7 @@ const startWorker = (workerId) => {
       return;
     }
 
-    const authRequired = !PUBLIC_ENDPOINTS.some(endpoint => endpoint === req.path);
+    const authRequired = alwaysRequireAuth || !PUBLIC_ENDPOINTS.some(endpoint => endpoint === req.path);
     const allowedScopes = [];
 
     if (authRequired) {
@@ -435,7 +439,10 @@ const startWorker = (workerId) => {
     const accountId = req.accountId || req.remoteAddress;
 
     res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Transfer-Encoding', 'chunked');
+
+    res.write(':)\n');
 
     const heartbeat = setInterval(() => res.write(':thump\n'), 15000);
 
@@ -531,6 +538,13 @@ const startWorker = (workerId) => {
     streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
 
+  app.get('/api/v1/streaming/public/remote', (req, res) => {
+    const onlyMedia = req.query.only_media === '1' || req.query.only_media === 'true';
+    const channel   = onlyMedia ? 'timeline:public:remote:media' : 'timeline:public:remote';
+
+    streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req), true);
+  });
+
   app.get('/api/v1/streaming/direct', (req, res) => {
     const channel = `timeline:direct:${req.accountId}`;
     streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req, subscriptionHeartbeat(channel)), true);
@@ -595,11 +609,17 @@ const startWorker = (workerId) => {
     case 'public:local':
       streamFrom('timeline:public:local', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
+    case 'public:remote':
+      streamFrom('timeline:public:remote', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      break;
     case 'public:media':
       streamFrom('timeline:public:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'public:local:media':
       streamFrom('timeline:public:local:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      break;
+    case 'public:remote:media':
+      streamFrom('timeline:public:remote:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'direct':
       channel = `timeline:direct:${req.accountId}`;
@@ -672,7 +692,7 @@ const attachServerWithConfig = (server, onSuccess) => {
       }
     });
   } else {
-    server.listen(+process.env.PORT || 4000, process.env.BIND || '0.0.0.0', () => {
+    server.listen(+process.env.PORT || 4000, process.env.BIND || '127.0.0.1', () => {
       if (onSuccess) {
         onSuccess(`${server.address().address}:${server.address().port}`);
       }

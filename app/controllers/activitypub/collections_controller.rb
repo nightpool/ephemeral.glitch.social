@@ -1,29 +1,20 @@
 # frozen_string_literal: true
 
-class ActivityPub::CollectionsController < Api::BaseController
+class ActivityPub::CollectionsController < ActivityPub::BaseController
   include SignatureVerification
+  include AccountOwnedConcern
 
-  before_action :set_account
+  before_action :require_signature!, if: :authorized_fetch_mode?
   before_action :set_size
   before_action :set_statuses
   before_action :set_cache_headers
 
   def show
-    render_cached_json(['activitypub', 'collection', @account, params[:id]], content_type: 'application/activity+json') do
-      ActiveModelSerializers::SerializableResource.new(
-        collection_presenter,
-        serializer: ActivityPub::CollectionSerializer,
-        adapter: ActivityPub::Adapter,
-        skip_activities: true
-      )
-    end
+    expires_in 3.minutes, public: public_fetch_mode?
+    render_with_cache json: collection_presenter, content_type: 'application/activity+json', serializer: ActivityPub::CollectionSerializer, adapter: ActivityPub::Adapter, skip_activities: true
   end
 
   private
-
-  def set_account
-    @account = Account.find_local!(params[:account_username])
-  end
 
   def set_statuses
     @statuses = scope_for_collection
@@ -33,20 +24,23 @@ class ActivityPub::CollectionsController < Api::BaseController
   def set_size
     case params[:id]
     when 'featured'
-      @account.pinned_statuses.count
+      @size = @account.pinned_statuses.count
     else
-      raise ActiveRecord::RecordNotFound
+      not_found
     end
   end
 
   def scope_for_collection
     case params[:id]
     when 'featured'
-      @account.statuses.permitted_for(@account, signed_request_account).tap do |scope|
-        scope.merge!(@account.pinned_statuses)
+      # Because in public fetch mode we cache the response, there would be no
+      # benefit from performing the check below, since a blocked account or domain
+      # would likely be served the cache from the reverse proxy anyway
+      if authorized_fetch_mode? && !signed_request_account.nil? && (@account.blocking?(signed_request_account) || (!signed_request_account.domain.nil? && @account.domain_blocking?(signed_request_account.domain)))
+        Status.none
+      else
+        @account.pinned_statuses
       end
-    else
-      raise ActiveRecord::RecordNotFound
     end
   end
 

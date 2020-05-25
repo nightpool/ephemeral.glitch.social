@@ -18,4 +18,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'PubSubHubbub'
   inflect.acronym 'ActivityStreams'
   inflect.acronym 'JsonLd'
+  inflect.acronym 'NodeInfo'
+
+  inflect.singular 'data', 'data'
 end
