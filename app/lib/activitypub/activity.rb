@@ -105,14 +105,13 @@ class ActivityPub::Activity
     status.reblog? && status.reblog.account.local?
   end
 
-<<<<<<< HEAD
   def spammy_mentions?(status)
     status.has_non_mention_links? &&
     @account.followers.local.count == 0
-=======
+  end
+
   def reblog_by_following_group_account?(status)
     status.reblog? && status.account.group? && status.reblog.account.following?(status.account)
->>>>>>> upstream/master
   end
 
   def notify_about_reblog(status)
