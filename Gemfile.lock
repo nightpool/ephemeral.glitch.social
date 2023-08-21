@@ -192,7 +192,7 @@ GEM
       devise (>= 4.0.0)
       rpam2 (~> 4.0)
     diff-lcs (1.5.0)
-    discard (1.2.1)
+    discard (1.3.0)
       activerecord (>= 4.2, < 8)
     docile (1.3.4)
     domain_name (0.5.20190701)
@@ -396,7 +396,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     mini_portile2 (2.8.2)
-    minitest (5.18.1)
+    minitest (5.19.0)
     msgpack (1.5.1)
     multi_json (1.15.0)
     multipart-post (2.1.1)
@@ -721,7 +721,7 @@ GEM
     xorcist (1.1.2)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.11)
 
 PLATFORMS
   ruby
@@ -754,7 +754,7 @@ DEPENDENCIES
   devise (~> 4.8)
   devise-two-factor (~> 4.0)
   devise_pam_authenticatable2 (~> 9.2)
-  discard (~> 1.2)
+  discard (~> 1.3)
   doorkeeper (~> 5.5)
   dotenv-rails (~> 2.7)
   ed25519 (~> 1.3)
