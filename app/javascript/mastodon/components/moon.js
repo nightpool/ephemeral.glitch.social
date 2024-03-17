@@ -1,5 +1,6 @@
-import SunCalc from 'suncalc';
 import React from 'react';
+
+import SunCalc from 'suncalc';
 
 class Moon extends React.Component {
   componentDidMount(){

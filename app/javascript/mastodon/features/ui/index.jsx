@@ -23,6 +23,7 @@ import { clearHeight } from '../../actions/height_cache';
 import { expandNotifications } from '../../actions/notifications';
 import { fetchServer, fetchServerTranslationLanguages } from '../../actions/server';
 import { expandHomeTimeline } from '../../actions/timelines';
+import Moon from '../../components/moon';
 import initialState, { me, owner, singleUserMode, trendsEnabled, trendsAsLanding } from '../../initial_state';
 
 import BundleColumnError from './components/bundle_column_error';
@@ -71,7 +72,6 @@ import { WrappedSwitch, WrappedRoute } from './util/react_router_helpers';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '../../components/status';
-import Moon from '../../components/moon';
 
 const messages = defineMessages({
   beforeUnload: { id: 'ui.beforeunload', defaultMessage: 'Your draft will be lost if you leave Mastodon.' },
