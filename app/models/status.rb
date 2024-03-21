@@ -315,7 +315,7 @@ class Status < ApplicationRecord
   end
 
   def schedule_removal
-    return if Sidekiq::Testing.inline?
+    return if Rails.env.test?
 
     moon = Lunartic.today
     removal_delay = (moon.percent_full * 220) + 20
